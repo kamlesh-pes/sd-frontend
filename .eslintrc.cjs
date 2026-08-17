@@ -13,5 +13,14 @@ module.exports = {
       version: 'detect',
     },
   },
-  rules: {},
+  globals: {
+    it: 'readonly',
+    describe: 'readonly',
+    expect: 'readonly',
+    beforeEach: 'readonly',
+    afterEach: 'readonly',
+  },
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+  },
 }
