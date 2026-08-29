@@ -2,10 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
+:root {
+  --color-background: 210 25% 98%;
+  --color-foreground: 215 28% 17%;
+  --color-surface: 0 0% 100%;
+  --color-muted: 210 16% 93%;
+  --color-muted-foreground: 215 16% 47%;
+  --color-border: 214 20% 86%;
+  --color-primary: 173 80% 32%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-accent: 38 92% 50%;
+  --color-accent-foreground: 24 10% 10%;
+  --color-destructive: 0 72% 51%;
+  --color-ring: 173 80% 32%;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-sm: 0 1px 2px hsl(215 28% 17% / 0.06);
+  --shadow-md: 0 8px 24px hsl(215 28% 17% / 0.08);
+}
+
+html,
+body,
+#root {
   height: 100%;
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  @apply bg-background text-foreground font-sans antialiased;
+  margin: 0;
+}
+
+:focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2;
 }

@@ -12,7 +12,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.cjs`, `postcss.config.cjs`, `.eslintrc.cjs`, `.prettierrc`, `vitest.config.ts`, `.gitignore`, `README.md`
 - Tests required: Smoke test that a sample component renders with `vitest` and that `npm run build` exits successfully.
 - Acceptance criteria: `npm run dev` starts a dev server; `npm run build` completes; `npm test` runs and passes smoke test.
-- Status: Not Started
+- Status: Complete
 
 ---
 
@@ -24,7 +24,8 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `.github/workflows/ci.yml`
 - Tests required: CI workflow runs and completes on a sample PR or push.
 - Acceptance criteria: PR triggers CI and checks pass (lint, tests, build).
-- Status: Not Started
+- Status: Complete
+
 
 ---
 
@@ -36,7 +37,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/styles/tokens.ts`, `tailwind.config.cjs`, `src/styles/globals.css`
 - Tests required: Unit test importing tokens and a visual/snapshot test for a token-driven component.
 - Acceptance criteria: Tokens are importable; Tailwind classes built and component styles respect tokens.
-- Status: Not Started
+- Status: Complete
 
 ---
 
@@ -44,11 +45,11 @@ This document converts the current todo list into a persistent implementation pl
 - Task name: UI primitives
 - Requirement/reference: Shared UI primitives listed in `docs/frontend-spec.md` (Button, Input, Modal, Card, Skeleton)
 - Description: Implement accessible, themeable primitives under `src/components/ui` used across app pages.
-- Dependencies: Tailwind, design tokens (T3), Radix/shadcn components (optional)
+- Dependency: Tailwind, design tokens (T3), Radix/shadcn components (optional)
 - Files/modules expected to change: `src/components/ui/Button.tsx`, `Input.tsx`, `Modal.tsx`, `Card.tsx`, `Skeleton.tsx`, `src/components/ui/index.ts`
 - Tests required: Unit tests for rendering and interaction; accessibility checks (axe) for each component.
 - Acceptance criteria: Components render, accept props/variants, and pass a11y checks.
-- Status: Not Started
+- Status: Complete
 
 ---
 
