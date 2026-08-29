@@ -61,7 +61,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/lib/api/client.ts`, `src/lib/api/endpoints.ts`, `src/lib/api/types.ts`
 - Tests required: Unit tests mocking network responses for success and error payloads per API contract.
 - Acceptance criteria: Client calls `/api/v1/*`, parses error format, and surfaces errors to callers consistently.
-- Status: Not Started
+- Status: Complete
 
 ---
 
