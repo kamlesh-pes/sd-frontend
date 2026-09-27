@@ -1,0 +1,67 @@
+import { renderHook, act, waitFor } from '@testing-library/react'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { useAuth } from '../useAuth'
+
+const mockLoginUser = vi.fn()
+const mockLogoutUser = vi.fn()
+const mockRefreshSession = vi.fn()
+
+vi.mock('../../lib/api/auth', () => ({
+  loginUser: (...args: unknown[]) => mockLoginUser(...args),
+  logoutUser: (...args: unknown[]) => mockLogoutUser(...args),
+  refreshSession: (...args: unknown[]) => mockRefreshSession(...args),
+}))
+
+describe('useAuth', () => {
+  beforeEach(() => {
+    window.sessionStorage.clear()
+    mockLoginUser.mockReset()
+    mockLogoutUser.mockReset()
+    mockRefreshSession.mockReset()
+  })
+
+  it('logs user in and stores the session', async () => {
+    mockLoginUser.mockResolvedValue({
+      accessToken: 'token-123',
+      refreshToken: 'refresh-123',
+      user: { id: 'user-1', email: 'user@example.com' },
+      expiresAt: '2026-10-01T00:00:00.000Z',
+    })
+
+    const { result } = renderHook(() => useAuth())
+
+    await act(async () => {
+      await result.current.login({ email: 'user@example.com', password: 'secret' })
+    })
+
+    await waitFor(() => {
+      expect(result.current.isAuthenticated).toBe(true)
+    })
+
+    expect(result.current.user).toMatchObject({ email: 'user@example.com' })
+    expect(window.sessionStorage.length).toBeGreaterThan(0)
+  })
+
+  it('clears the session when logging out', async () => {
+    mockLogoutUser.mockResolvedValue(undefined)
+    window.sessionStorage.setItem(
+      'sd-auth-session',
+      JSON.stringify({
+        accessToken: 'token-123',
+        refreshToken: 'refresh-123',
+        user: { id: 'user-1', email: 'user@example.com' },
+        expiresAt: '2026-10-01T00:00:00.000Z',
+      })
+    )
+
+    const { result } = renderHook(() => useAuth())
+
+    await act(async () => {
+      await result.current.logout()
+    })
+
+    expect(result.current.isAuthenticated).toBe(false)
+    expect(result.current.user).toBeNull()
+    expect(mockLogoutUser).toHaveBeenCalledTimes(1)
+  })
+})

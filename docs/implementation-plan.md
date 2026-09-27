@@ -73,7 +73,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/lib/auth/session.ts`, `src/lib/api/auth.ts`, `src/hooks/useAuth.ts`, `src/pages/login/*`
 - Tests required: Unit tests for `useAuth` and session helpers (mock API); integration test for login flow.
 - Acceptance criteria: `login` and `logout` flows update session state; tokens are not persisted to `localStorage` and `logout` calls `/auth/logout`.
-- Status: Not Started
+- Status: Complete
 
 ---
 
