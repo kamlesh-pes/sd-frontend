@@ -217,7 +217,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `e2e/playwright.config.ts` (or `cypress.json`), `e2e/tests/*`
 - Tests required: E2E scenarios for guest flow, OTP login, order creation, and admin management.
 - Acceptance criteria: E2E flows pass against a test/staging backend in CI.
-- Status: Not Started
+- Status: Complete
 
 ---
 
