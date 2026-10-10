@@ -245,6 +245,18 @@ This document converts the current todo list into a persistent implementation pl
 
 ---
 
+### Task T21
+- Task name: Final closeout & handoff
+- Requirement/reference: Project completion checklist and delivery handoff (AGENTS.md, implementation-plan.md, security review docs)
+- Description: Confirm the roadmap is fully complete, document final validation status, and prepare a concise handoff summary for review or release readiness.
+- Dependencies: All prior tasks and validation checks
+- Files/modules expected to change: `docs/final-handoff.md`, `docs/implementation-plan.md`, any final review notes
+- Tests required: Final regression pass and documentation review
+- Acceptance criteria: All tasks are marked complete; final handoff summary reflects validated project status and guardrails for future contract changes.
+- Status: Complete
+
+---
+
 Status legend: Not Started / In Progress / Completed
 
 This plan maps directly to the specification documents; implementers should not change API contracts or database schemas without explicit coordination and documentation.
