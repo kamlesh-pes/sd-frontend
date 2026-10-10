@@ -205,7 +205,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `tests/unit/*`, `tests/integration/*`, `vitest.config.ts`
 - Tests required: Tests for search, cart, checkout, auth flows as enumerated in `docs/testing.md`.
 - Acceptance criteria: Tests run locally and in CI; coverage for critical flows present.
-- Status: Not Started
+- Status: Complete
 
 ---
 
