@@ -1,5 +1,5 @@
 export { apiRequest, apiGet, apiPost, apiPatch, apiPut, apiDelete, ApiClientError } from './client'
-export { createOrder, generateIdempotencyKey } from './orders'
-export type { CheckoutAddress, OrderResponse } from './orders'
+export { createOrder, generateIdempotencyKey, listOrders, getOrder } from './orders'
+export type { CheckoutAddress, OrderItem, OrderResponse } from './orders'
 export type { ApiError, ErrorResponse, RequestOptions, ApiResponse } from './types'
 export * as endpoints from './endpoints'

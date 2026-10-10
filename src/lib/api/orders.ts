@@ -1,4 +1,4 @@
-import { apiPost } from './client'
+import { apiGet, apiPost } from './client'
 import { orders } from './endpoints'
 
 export interface CheckoutAddress {
@@ -11,12 +11,25 @@ export interface CheckoutAddress {
   country: string
 }
 
+export interface OrderItem {
+  id?: string
+  name?: string
+  quantity?: number
+  unitPrice?: string
+  thumbnailUrl?: string
+}
+
 export interface OrderResponse {
   id?: string
   orderId?: string
   status?: string
   total?: string
   cartId?: string
+  createdAt?: string
+  itemCount?: number
+  items?: OrderItem[]
+  shippingAddress?: Partial<CheckoutAddress>
+  timeline?: string[]
   [key: string]: unknown
 }
 
@@ -34,4 +47,12 @@ export async function createOrder(
   idempotencyKey: string = generateIdempotencyKey()
 ): Promise<OrderResponse> {
   return apiPost<OrderResponse>(orders.create, { cartId, idempotencyKey }, { idempotencyKey })
+}
+
+export async function listOrders(): Promise<OrderResponse[]> {
+  return apiGet<OrderResponse[]>(orders.list)
+}
+
+export async function getOrder(orderId: string): Promise<OrderResponse> {
+  return apiGet<OrderResponse>(orders.get(orderId))
 }

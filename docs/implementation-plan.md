@@ -157,7 +157,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/Orders.tsx`, `src/pages/OrderDetail.tsx`, `src/components/order/OrderTimeline.tsx`, `src/lib/api/orders.ts`
 - Tests required: Component tests for list/detail; integration tests for fetching order data and timeline rendering.
 - Acceptance criteria: Orders list shows ID/date/count/thumbnail/total/status; detail shows timeline and order items; user cannot edit status.
-- Status: Not Started
+- Status: Complete
 
 ---
 
