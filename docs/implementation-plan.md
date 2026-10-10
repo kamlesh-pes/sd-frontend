@@ -121,7 +121,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/state/guestCart.ts`, `src/lib/persistence/guestCartStorage.ts`, `src/components/cart/CartSummary.tsx`
 - Tests required: Unit tests for guest cart operations and persistence; integration test for persistence across reloads.
 - Acceptance criteria: Guest cart operations work and persist; stored format is mergeable with server cart.
-- Status: Not Started
+- Status: Complete
 
 ---
 
