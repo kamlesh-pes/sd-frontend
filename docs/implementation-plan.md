@@ -133,7 +133,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/hooks/useCartMerge.ts`, `src/lib/api/cart.ts`, `src/state/cartStore.ts`, `src/pages/login/*`
 - Tests required: Integration test mocking login and merge endpoint; unit tests for merge logic.
 - Acceptance criteria: After login, server cart reflects merged items; guest cart cleared; UI shows merged cart.
-- Status: Not Started
+- Status: Complete
 
 ---
 

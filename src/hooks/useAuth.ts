@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { loginUser, logoutUser, refreshSession } from '../lib/api/auth'
 import { AuthUser, getSession, clearSession, saveSession } from '../lib/auth/session'
+import { useCartMerge } from './useCartMerge'
 
 export interface AuthState {
   user: AuthUser | null
@@ -15,6 +16,7 @@ export interface AuthState {
 
 export function useAuth(): AuthState {
   const [session, setSession] = useState(() => getSession())
+  const { mergeGuestCart } = useCartMerge()
 
   const syncSession = useCallback(() => {
     setSession(getSession())
@@ -41,7 +43,9 @@ export function useAuth(): AuthState {
       expiresAt: result.expiresAt ?? null,
       isAuthenticated: Boolean(result.accessToken),
     })
-  }, [])
+
+    await mergeGuestCart()
+  }, [mergeGuestCart])
 
   const logout = useCallback(async () => {
     try {
