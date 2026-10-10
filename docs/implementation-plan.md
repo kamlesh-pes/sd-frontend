@@ -109,7 +109,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/ProductDetail.tsx`, `src/components/product/ProductDetailCard.tsx`, `src/lib/api/products.ts`, `src/state/cartStore.ts`
 - Tests required: Component tests for detail view; integration tests for add-to-cart action with mock server responses.
 - Acceptance criteria: Product details show correctly; add-to-cart makes server call and UI updates or shows server error.
-- Status: Not Started
+- Status: Complete
 
 ---
 
