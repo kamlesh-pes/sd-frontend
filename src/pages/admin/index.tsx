@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import ProductManagementPage from './products'
 import AdminLayout from './Layout'
 
 export interface AdminRouteProps {
@@ -53,7 +54,7 @@ export function AdminDashboardPage({ title = 'Admin dashboard', stats = [
 
 export const adminRoutes = [
   { path: '/admin', label: 'Dashboard', element: <AdminDashboardPage /> },
-  { path: '/admin/products', label: 'Products', element: <AdminDashboardPage title="Products" /> },
+  { path: '/admin/products', label: 'Products', element: <ProductManagementPage /> },
   { path: '/admin/orders', label: 'Orders', element: <AdminDashboardPage title="Orders" /> },
   { path: '/admin/reports', label: 'Reports', element: <AdminDashboardPage title="Reports" /> },
 ]

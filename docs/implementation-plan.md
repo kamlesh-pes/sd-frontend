@@ -193,7 +193,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/admin/products/*`, `src/components/admin/ProductForm.tsx`, `src/lib/api/admin/products.ts`
 - Tests required: Unit tests for forms; integration tests mocking admin APIs for success and error cases.
 - Acceptance criteria: Admin users can create/update/delete products and edit stock/discounts; server validation errors are shown.
-- Status: Not Started
+- Status: Complete
 
 ---
 
