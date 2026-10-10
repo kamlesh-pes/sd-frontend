@@ -181,7 +181,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/admin/Layout.tsx`, `src/pages/admin/index.tsx`, route configuration
 - Tests required: Render tests for layout; integration tests verifying server 403 handling when unauthorized.
 - Acceptance criteria: Admin routes render with admin layout; unauthorized attempts produce proper error UI and do not expose sensitive actions.
-- Status: Not Started
+- Status: Complete
 
 ---
 
