@@ -4,7 +4,7 @@ export const tokens = {
     foreground: 'hsl(215 28% 17%)',
     surface: 'hsl(0 0% 100%)',
     muted: 'hsl(210 16% 93%)',
-    mutedForeground: 'hsl(215 16% 47%)',
+    mutedForeground: 'hsl(215 28% 30%)',
     border: 'hsl(214 20% 86%)',
     primary: 'hsl(173 80% 32%)',
     primaryForeground: 'hsl(0 0% 100%)',

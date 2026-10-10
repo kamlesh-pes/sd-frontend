@@ -229,7 +229,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: Test suites and CI config
 - Tests required: Axe/unit a11y checks and E2E a11y runs at both breakpoints.
 - Acceptance criteria: No critical accessibility violations; UI validated at 375px and 1440px.
-- Status: Not Started
+- Status: Complete
 
 ---
 
