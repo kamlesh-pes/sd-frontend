@@ -169,7 +169,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/components/order/CancellationForm.tsx`, `src/pages/OrderDetail.tsx`, `src/lib/api/orders.ts`
 - Tests required: Unit tests for eligibility UI; integration tests for cancel and support request API calls.
 - Acceptance criteria: Correct UI shown per eligibility; cancel succeeds when allowed; support requests submit correctly.
-- Status: Not Started
+- Status: Complete
 
 ---
 

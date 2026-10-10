@@ -30,6 +30,7 @@ export interface OrderResponse {
   items?: OrderItem[]
   shippingAddress?: Partial<CheckoutAddress>
   timeline?: string[]
+  cancelEligible?: boolean
   [key: string]: unknown
 }
 
@@ -55,4 +56,12 @@ export async function listOrders(): Promise<OrderResponse[]> {
 
 export async function getOrder(orderId: string): Promise<OrderResponse> {
   return apiGet<OrderResponse>(orders.get(orderId))
+}
+
+export async function cancelOrder(orderId: string, reason: string): Promise<OrderResponse> {
+  return apiPost<OrderResponse>(orders.cancel(orderId), { reason })
+}
+
+export async function createSupportRequest(orderId: string, message: string): Promise<{ ok: boolean }> {
+  return apiPost<{ ok: boolean }>(orders.supportRequest(orderId), { message })
 }
