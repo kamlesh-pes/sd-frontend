@@ -97,7 +97,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/ProductsPage.tsx`, `src/components/product/ProductGrid.tsx`, `src/components/product/ProductCard.tsx`, `src/lib/api/products.ts`, `src/hooks/useSearch.ts`
 - Tests required: Unit tests for `useSearch` debounce; component tests for ProductGrid; integration tests with mocked API.
 - Acceptance criteria: Search triggers after 2+ chars and debounce; suggestions returned; filters/pagination update results.
-- Status: Not Started
+- Status: Complete
 
 ---
 
