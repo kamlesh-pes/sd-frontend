@@ -23,7 +23,7 @@ const emptySession: AuthSession = {
   isAuthenticated: false,
 }
 
-export function saveSession(session: Partial<AuthSession> & { accessToken: string; refreshToken?: string; user?: AuthUser | null; expiresAt?: string }): void {
+export function saveSession(session: Partial<AuthSession> & { accessToken: string; refreshToken?: string | null; user?: AuthUser | null; expiresAt?: string |null }): void {
   const nextSession: AuthSession = {
     accessToken: session.accessToken ?? null,
     refreshToken: session.refreshToken ?? null,

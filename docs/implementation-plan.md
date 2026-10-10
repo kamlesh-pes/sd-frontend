@@ -85,7 +85,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/lib/queryClient.ts`, `src/state/store.ts`, `src/App.tsx` (provider setup)
 - Tests required: Unit tests for store actions; Query client basic config test.
 - Acceptance criteria: QueryClient provider set up, store exports and functions behave as expected.
-- Status: Not Started
+- Status: Complete
 
 ---
 
