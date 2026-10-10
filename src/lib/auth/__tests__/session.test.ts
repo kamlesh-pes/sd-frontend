@@ -16,12 +16,14 @@ describe('auth session helpers', () => {
     window.sessionStorage.clear()
   })
 
+  const futureExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString()
+
   it('stores an authenticated session in sessionStorage', () => {
     saveSession({
       accessToken: 'token-123',
       refreshToken: 'refresh-123',
       user: { id: 'user-1', email: 'user@example.com' },
-      expiresAt: '2026-10-01T00:00:00.000Z',
+      expiresAt: futureExpiry,
     })
 
     const saved = getSession()
@@ -30,6 +32,18 @@ describe('auth session helpers', () => {
     expect(saved.refreshToken).toBe('refresh-123')
     expect(saved.user).toEqual({ id: 'user-1', email: 'user@example.com' })
     expect(saved.isAuthenticated).toBe(true)
+    expect(window.sessionStorage.getItem(sessionStorageKey)).toContain('token-123')
+  })
+
+  it('does not persist auth tokens in localStorage', () => {
+    saveSession({
+      accessToken: 'token-123',
+      refreshToken: 'refresh-123',
+      user: { id: 'user-1' },
+      expiresAt: futureExpiry,
+    })
+
+    expect(window.localStorage.getItem('sd-auth-session')).toBeNull()
     expect(window.sessionStorage.getItem(sessionStorageKey)).toContain('token-123')
   })
 
@@ -51,7 +65,7 @@ describe('auth session helpers', () => {
       accessToken: 'token-123',
       refreshToken: 'refresh-123',
       user: { id: 'user-1' },
-      expiresAt: '2026-10-01T00:00:00.000Z',
+      expiresAt: futureExpiry,
     })
 
     clearSession()

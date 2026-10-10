@@ -241,7 +241,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `SECURITY.md`, updated docs, any API contract docs if changes are necessary
 - Tests required: Automated checks (scan for tokens in localStorage usage), manual security review sign-off
 - Acceptance criteria: Security checklist passed; no tokens persisted insecurely; all API/DB changes documented and coordinated.
-- Status: Not Started
+- Status: Complete
 
 ---
 

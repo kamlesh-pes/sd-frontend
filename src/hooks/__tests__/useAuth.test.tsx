@@ -19,6 +19,8 @@ vi.mock('../../lib/api/cart', () => ({
 }))
 
 describe('useAuth', () => {
+  const futureExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString()
+
   beforeEach(() => {
     window.sessionStorage.clear()
     window.localStorage.clear()
@@ -34,7 +36,7 @@ describe('useAuth', () => {
       accessToken: 'token-123',
       refreshToken: 'refresh-123',
       user: { id: 'user-1', email: 'user@example.com' },
-      expiresAt: '2026-10-01T00:00:00.000Z',
+      expiresAt: futureExpiry,
     })
 
     const { result } = renderHook(() => useAuth())
@@ -56,7 +58,7 @@ describe('useAuth', () => {
       accessToken: 'token-123',
       refreshToken: 'refresh-123',
       user: { id: 'user-1', email: 'user@example.com' },
-      expiresAt: '2026-10-01T00:00:00.000Z',
+      expiresAt: futureExpiry,
     })
     mockMergeGuestCartIntoServerCart.mockResolvedValue(undefined)
     guestCartStore.getState().addItem({
@@ -92,7 +94,7 @@ describe('useAuth', () => {
         accessToken: 'token-123',
         refreshToken: 'refresh-123',
         user: { id: 'user-1', email: 'user@example.com' },
-        expiresAt: '2026-10-01T00:00:00.000Z',
+        expiresAt: futureExpiry,
       })
     )
 
