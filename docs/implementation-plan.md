@@ -145,7 +145,7 @@ This document converts the current todo list into a persistent implementation pl
 - Files/modules expected to change: `src/pages/Checkout/*`, `src/components/checkout/AddressForm.tsx`, `src/components/checkout/OrderSummary.tsx`, `src/lib/api/orders.ts`
 - Tests required: Integration tests for checkout happy path and common failures; unit tests for idempotency key generation handling.
 - Acceptance criteria: Auth required to access checkout; server summary is shown; `POST /orders` called with idempotency key and order created once.
-- Status: Not Started
+- Status: Complete
 
 ---
 
