@@ -1,9 +1,12 @@
 import { useAppStore } from '../state/store'
 import { useSearch } from '../hooks/useSearch'
+import { useAuth } from '../hooks/useAuth'
 import { ProductGrid } from '../components/product/ProductGrid'
+import Button from '../components/ui/Button'
 
 export default function ProductsPage() {
   const { searchQuery, selectedCategory, setSearchQuery, setSelectedCategory } = useAppStore()
+  const { user, isAuthenticated, logout } = useAuth()
   const { products, isLoading, isError, error } = useSearch({
     query: searchQuery,
     category: selectedCategory,
@@ -17,6 +20,24 @@ export default function ProductsPage() {
         <div>
           <p className="text-sm uppercase tracking-[0.12em] text-muted-foreground">Sahastra Digital</p>
           <h1 className="mt-2 text-3xl font-bold text-foreground">Products</h1>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {isAuthenticated ? (
+            <>
+              <span className="text-sm text-muted-foreground">{user?.email ?? 'Signed in'}</span>
+              <Button variant="secondary" size="sm" onClick={() => void logout()}>
+                Log out
+              </Button>
+            </>
+          ) : (
+            <a
+              className="rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+              href="/login?returnTo=%2F"
+            >
+              Log in
+            </a>
+          )}
         </div>
 
         <div className="flex w-full max-w-xl flex-col gap-3 md:flex-row">

@@ -7,6 +7,7 @@ const mockFetch = vi.fn()
 beforeEach(() => {
   vi.stubGlobal('fetch', mockFetch)
   mockFetch.mockClear()
+  window.sessionStorage.removeItem('sd-auth-session')
 })
 
 afterEach(() => {
@@ -21,6 +22,23 @@ describe('API Client', () => {
         status: 200,
         json: async () => ({ data: { id: 1 } }),
         headers: new Headers(),
+      })
+
+      it('adds the current bearer token to authenticated requests', async () => {
+        window.sessionStorage.setItem(
+          'sd-auth-session',
+          JSON.stringify({
+            accessToken: 'session-access-token',
+            refreshToken: null,
+            user: null,
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+            isAuthenticated: true,
+          })
+        )
+
+        await apiRequest('/admin/products')
+
+        expect(mockFetch.mock.calls[0][1].headers.get('Authorization')).toBe('Bearer session-access-token')
       })
 
       await apiRequest('/products', { method: 'GET' })
@@ -61,8 +79,9 @@ describe('API Client', () => {
         headers: new Headers(),
       })
 
-      await expect(apiRequest('/products/999')).rejects.toThrow(ApiClientError)
-      await expect(apiRequest('/products/999')).rejects.toMatchObject({
+      const request = apiRequest('/products/999')
+      await expect(request).rejects.toThrow(ApiClientError)
+      await expect(request).rejects.toMatchObject({
         code: 'PRODUCT_NOT_FOUND',
         message: 'Product not found',
         correlationId: 'req-123',
@@ -72,8 +91,9 @@ describe('API Client', () => {
     it('throws ApiClientError on network failure', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network failed'))
 
-      await expect(apiRequest('/products')).rejects.toThrow(ApiClientError)
-      await expect(apiRequest('/products')).rejects.toMatchObject({
+      const request = apiRequest('/products')
+      await expect(request).rejects.toThrow(ApiClientError)
+      await expect(request).rejects.toMatchObject({
         code: 'NETWORK_ERROR',
       })
     })
@@ -86,8 +106,9 @@ describe('API Client', () => {
         headers: new Headers(),
       })
 
-      await expect(apiRequest('/products')).rejects.toThrow(ApiClientError)
-      await expect(apiRequest('/products')).rejects.toMatchObject({
+      const request = apiRequest('/products')
+      await expect(request).rejects.toThrow(ApiClientError)
+      await expect(request).rejects.toMatchObject({
         code: 'UNKNOWN_ERROR',
       })
     })

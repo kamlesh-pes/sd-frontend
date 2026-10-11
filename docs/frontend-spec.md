@@ -65,4 +65,4 @@ src/
 Use shared primitives such as Button, Input, Badge, Card, Modal, Skeleton, ProductCard, ProductGrid, PriceTag, StockBadge, CartItemRow, CartSummary, AddressForm, OrderSummaryCard, AdminTable, ReportFilterBar, StatCard.
 
 ## Security
-No localStorage tokens, no client secrets, no unnecessary PII exposure, and no UI-only authorization assumptions.
+No localStorage tokens, no client secrets, and no unnecessary PII exposure. Verify the current user's role with the backend before mounting `/admin/**` pages; never trust a role copied from browser storage. This UI gate does not replace backend authorization, which must protect every admin endpoint.

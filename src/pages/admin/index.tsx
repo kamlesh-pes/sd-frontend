@@ -16,6 +16,9 @@ export function AdminAccessDenied() {
       <p className="mt-2 text-sm text-muted-foreground">
         This area is for authorized administrators only. Backend authorization remains the final enforcement point.
       </p>
+      <a className="mt-4 inline-block text-sm text-primary underline" href="/">
+        Return to products
+      </a>
     </div>
   )
 }
@@ -33,21 +36,21 @@ export interface AdminDashboardProps {
   stats?: Array<{ label: string; value: string }>
 }
 
-export function AdminDashboardPage({ title = 'Admin dashboard', stats = [
-  { label: 'Orders', value: '128' },
-  { label: 'Revenue', value: '$48.2k' },
-  { label: 'Low stock', value: '12' },
-] }: AdminDashboardProps) {
+export function AdminDashboardPage({ title = 'Admin dashboard', stats = [] }: AdminDashboardProps) {
   return (
     <AdminLayout title={title}>
-      <div className="grid gap-4 md:grid-cols-3">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-border bg-surface p-5">
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
-            <p className="mt-2 text-3xl font-bold text-foreground">{stat.value}</p>
-          </div>
-        ))}
-      </div>
+      {stats.length ? (
+        <div className="grid gap-4 md:grid-cols-3">
+          {stats.map((stat) => (
+            <div key={stat.label} className="rounded-xl border border-border bg-surface p-5">
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="mt-2 text-3xl font-bold text-foreground">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">Dashboard data is not connected yet.</p>
+      )}
     </AdminLayout>
   )
 }

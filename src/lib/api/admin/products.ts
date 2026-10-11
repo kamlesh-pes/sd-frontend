@@ -37,7 +37,11 @@ export interface ProductPayload {
 }
 
 function normalizeProductPage(payload: unknown): ProductPageResponse {
-  const data = (payload ?? {}) as Record<string, unknown>
+  const response = (payload ?? {}) as Record<string, unknown>
+  const data =
+    response.data && typeof response.data === 'object'
+      ? (response.data as Record<string, unknown>)
+      : response
   const items = Array.isArray(data.items)
     ? (data.items as AdminProduct[])
     : Array.isArray(data.products)
@@ -48,10 +52,15 @@ function normalizeProductPage(payload: unknown): ProductPageResponse {
 
   return {
     items,
-    page: typeof data.page === 'number' ? data.page : 0,
+    page: typeof data.page === 'number' ? data.page : typeof data.number === 'number' ? data.number : 0,
     size: typeof data.size === 'number' ? data.size : items.length,
     totalPages: typeof data.totalPages === 'number' ? data.totalPages : 1,
-    total: typeof data.total === 'number' ? data.total : items.length,
+    total:
+      typeof data.total === 'number'
+        ? data.total
+        : typeof data.totalElements === 'number'
+          ? data.totalElements
+          : items.length,
   }
 }
 

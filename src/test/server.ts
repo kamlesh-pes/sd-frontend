@@ -27,6 +27,12 @@ const productCatalog = [
 ]
 
 export const server = setupServer(
+  http.get('/api/v1/auth/me', () => {
+    return HttpResponse.json({
+      data: { id: 'user-1', email: 'user@example.com', role: 'ROLE_CUSTOMER' },
+    })
+  }),
+
   http.get('/api/v1/products', () => {
     return HttpResponse.json({
       items: productCatalog,

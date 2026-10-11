@@ -9,6 +9,7 @@ export const auth = {
   login: '/auth/login',
   logout: '/auth/logout',
   refresh: '/auth/refresh',
+  me: '/auth/me',
   otpRequest: '/auth/otp/request',
   otpVerify: '/auth/otp/verify',
   linkEmail: '/users/me/link-email',

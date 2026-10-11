@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import { useAuth } from '../../hooks/useAuth'
+import Button from '../../components/ui/Button'
 
 export interface AdminLayoutProps {
   title: string
@@ -7,6 +9,8 @@ export interface AdminLayoutProps {
 }
 
 export function AdminLayout({ title, children, actions }: AdminLayoutProps) {
+  const { user, isAuthenticated, logout } = useAuth()
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-surface/80 backdrop-blur-sm">
@@ -21,6 +25,19 @@ export function AdminLayout({ title, children, actions }: AdminLayoutProps) {
             <a href="/admin/products" className="rounded-md px-3 py-2 text-foreground hover:bg-muted">Products</a>
             <a href="/admin/orders" className="rounded-md px-3 py-2 text-foreground hover:bg-muted">Orders</a>
             <a href="/admin/reports" className="rounded-md px-3 py-2 text-foreground hover:bg-muted">Reports</a>
+            {isAuthenticated ? (
+              <>
+                <span className="hidden text-muted-foreground sm:inline">{user?.email ?? 'Signed in'}</span>
+                <Button variant="secondary" size="sm" onClick={() => void logout()}>Log out</Button>
+              </>
+            ) : (
+              <a
+                className="rounded-md px-3 py-2 font-medium text-foreground hover:bg-muted"
+                href={`/login?returnTo=${encodeURIComponent(window.location.pathname)}`}
+              >
+                Log in
+              </a>
+            )}
           </nav>
         </div>
       </header>

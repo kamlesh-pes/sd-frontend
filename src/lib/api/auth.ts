@@ -1,10 +1,18 @@
-import { apiPost } from './client'
+import { apiGet, apiPost } from './client'
 import { auth } from './endpoints'
-import { saveSession } from '../lib/auth/session'
+import { hasAdminRole, saveSession, type AuthUser } from '../auth/session'
 
 export interface LoginRequest {
   email: string
   password: string
+}
+
+export interface RegisterRequest {
+  email: string
+  firstName: string
+  lastName: string
+  password: string
+  phone?: string
 }
 
 export interface AuthTokens {
@@ -19,8 +27,37 @@ export interface AuthTokens {
   expiresAt?: string
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+export async function verifyAdminAccess(): Promise<boolean> {
+  const response = await apiGet<unknown>(auth.me)
+  const payload = isRecord(response) && 'data' in response ? response.data : response
+  const user =
+    isRecord(payload) && isRecord(payload.user)
+      ? payload.user
+      : isRecord(payload)
+        ? payload
+        : null
+
+  return hasAdminRole(user as AuthUser | null)
+}
+
+export async function registerUser(payload: RegisterRequest): Promise<void> {
+  await apiPost<unknown>(auth.register, payload)
+}
+
 export async function loginUser(payload: LoginRequest): Promise<AuthTokens> {
-  const response = await apiPost<AuthTokens>(auth.login, payload)
+  const payloadResponse = await apiPost<AuthTokens | { data?: AuthTokens }>(auth.login, payload)
+  const response =
+    payloadResponse && typeof payloadResponse === 'object' && 'data' in payloadResponse
+      ? payloadResponse.data
+      : payloadResponse
+
+  if (!response || typeof response.accessToken !== 'string' || !response.accessToken) {
+    throw new Error('Login response did not include an access token.')
+  }
 
   const nextSession = {
     accessToken: response.accessToken,

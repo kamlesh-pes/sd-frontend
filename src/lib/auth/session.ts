@@ -1,10 +1,37 @@
 export const sessionStorageKey = 'sd-auth-session'
+export const authSessionChangeEvent = 'sd-auth-session-change'
 
 export interface AuthUser {
   id?: string
   email?: string
   mobile?: string
   [key: string]: unknown
+}
+
+function hasAdminRoleValue(value: unknown): boolean {
+  if (typeof value === 'string') {
+    const role = value.trim().toUpperCase()
+    return role === 'ADMIN' || role === 'ROLE_ADMIN'
+  }
+
+  if (Array.isArray(value)) {
+    return value.some(hasAdminRoleValue)
+  }
+
+  if (value && typeof value === 'object' && 'authority' in value) {
+    return hasAdminRoleValue(value.authority)
+  }
+
+  return false
+}
+
+export function hasAdminRole(user: AuthUser | null): boolean {
+  return Boolean(
+    user &&
+      (hasAdminRoleValue(user.role) ||
+        hasAdminRoleValue(user.roles) ||
+        hasAdminRoleValue(user.authorities))
+  )
 }
 
 export interface AuthSession {
@@ -33,6 +60,7 @@ export function saveSession(session: Partial<AuthSession> & { accessToken: strin
   }
 
   window.sessionStorage.setItem(sessionStorageKey, JSON.stringify(nextSession))
+  window.dispatchEvent(new Event(authSessionChangeEvent))
 }
 
 export function getSession(): AuthSession {
@@ -75,4 +103,5 @@ export function getAccessToken(): string | null {
 
 export function clearSession(): void {
   window.sessionStorage.removeItem(sessionStorageKey)
+  window.dispatchEvent(new Event(authSessionChangeEvent))
 }

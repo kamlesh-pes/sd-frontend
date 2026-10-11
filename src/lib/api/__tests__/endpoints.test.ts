@@ -8,6 +8,7 @@ describe('Endpoints', () => {
       expect(auth.login).toBe('/auth/login')
       expect(auth.logout).toBe('/auth/logout')
       expect(auth.refresh).toBe('/auth/refresh')
+      expect(auth.me).toBe('/auth/me')
       expect(auth.otpRequest).toBe('/auth/otp/request')
       expect(auth.otpVerify).toBe('/auth/otp/verify')
       expect(auth.linkEmail).toBe('/users/me/link-email')

@@ -1,4 +1,5 @@
 import { ApiClientError, ErrorResponse, RequestOptions } from './types'
+import { getAccessToken } from '../auth/session'
 
 const API_BASE_URL = '/api/v1'
 
@@ -29,6 +30,11 @@ export async function apiRequest<T>(
   // Build headers
   const headers = new Headers(fetchOptions.headers || {})
   headers.set('Content-Type', 'application/json')
+
+  const accessToken = getAccessToken()
+  if (accessToken && !headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${accessToken}`)
+  }
 
   if (idempotencyKey) {
     headers.set('Idempotency-Key', idempotencyKey)

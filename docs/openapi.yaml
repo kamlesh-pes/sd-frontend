@@ -6,6 +6,19 @@ info:
 servers:
   - url: http://localhost:8080/api/v1
 paths:
+  /auth/register:
+    post:
+      summary: Register a customer account
+      description: Creates an inactive account and initiates email verification.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Account created; email verification is required before login.
   /auth/login:
     post:
       summary: Authenticate a user
@@ -160,6 +173,32 @@ components:
         password:
           type: string
           format: password
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastName
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+          minLength: 2
+          maxLength: 100
+        lastName:
+          type: string
+          minLength: 2
+          maxLength: 100
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 255
+        phone:
+          type: string
     OrderRequest:
       type: object
       required:

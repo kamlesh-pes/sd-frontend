@@ -161,6 +161,8 @@ export function ProductManagementPage() {
           <CardBody>
             {isLoading ? (
               <p className="text-sm text-muted-foreground">Loading products...</p>
+            ) : error ? (
+              <p className="text-sm text-muted-foreground">Inventory is unavailable until the request succeeds.</p>
             ) : products.length === 0 ? (
               <p className="text-sm text-muted-foreground">No products found.</p>
             ) : (
