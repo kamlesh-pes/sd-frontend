@@ -54,6 +54,10 @@ export const user = {
 
 // Admin endpoints
 export const admin = {
+  catalog: {
+    categories: '/admin/catalog/categories',
+    brands: '/admin/catalog/brands',
+  },
   products: {
     create: '/admin/products',
     list: '/admin/products',

@@ -3,6 +3,7 @@
 Use Vitest + React Testing Library where applicable.
 
 Test search, debounce, filters, pagination, product display, guest cart, cart merge, checkout redirect/return, address selection, order timeline, cancellation/support UI, admin UI, and API error handling.
+Admin product-management coverage should include creating categories and brands, verifying they appear as product-form options, and submitting their backend IDs with a product.
 
 Validate responsive behavior at 375px and 1440px.
 

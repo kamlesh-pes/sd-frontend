@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Button from '../ui/Button'
 import Input from '../ui/Input'
 import Card, { CardBody, CardDescription, CardHeader, CardTitle } from '../ui/Card'
+import type { CatalogItem } from '../../lib/api/admin/catalog'
 
 export interface ProductFormValues {
   id?: string
   name: string
   sku?: string
-  brand?: string
-  category: string
+  brandId: string
+  categoryId: string
   description?: string
   price: string
   stock: string
@@ -18,6 +19,10 @@ export interface ProductFormValues {
 
 export interface ProductFormProps {
   initialValues?: Partial<ProductFormValues>
+  brands: CatalogItem[]
+  categories: CatalogItem[]
+  // The callback's values parameter is part of this component's public TypeScript API.
+  // eslint-disable-next-line no-unused-vars
   onSubmit?: (values: ProductFormValues) => void | Promise<void>
   onCancel?: () => void
   submitLabel?: string
@@ -27,8 +32,8 @@ export interface ProductFormProps {
 const emptyValues: ProductFormValues = {
   name: '',
   sku: '',
-  brand: '',
-  category: 'electronics',
+  brandId: '',
+  categoryId: '',
   description: '',
   price: '',
   stock: '0',
@@ -38,6 +43,8 @@ const emptyValues: ProductFormValues = {
 
 export function ProductForm({
   initialValues,
+  brands,
+  categories,
   onSubmit,
   onCancel,
   submitLabel = 'Save product',
@@ -66,12 +73,26 @@ export function ProductForm({
       nextErrors.name = 'Name is required.'
     }
 
-    if (!values.price.trim()) {
-      nextErrors.price = 'Price is required.'
+    if (!values.sku?.trim()) {
+      nextErrors.sku = 'SKU is required.'
     }
 
-    if (!values.category.trim()) {
-      nextErrors.category = 'Category is required.'
+    if (!values.description?.trim()) {
+      nextErrors.description = 'Description is required.'
+    }
+
+    if (!values.price.trim()) {
+      nextErrors.price = 'Price is required.'
+    } else if (!/^\d+(\.\d{1,2})?$/.test(values.price) || Number(values.price) < 0.01 || Number(values.price) > 99999999.99) {
+      nextErrors.price = 'Enter a price from 0.01 to 99999999.99 with at most 2 decimal places.'
+    }
+
+    if (!values.categoryId) {
+      nextErrors.categoryId = 'Category is required.'
+    }
+
+    if (!values.brandId) {
+      nextErrors.brandId = 'Brand is required.'
     }
 
     setErrors(nextErrors)
@@ -108,6 +129,8 @@ export function ProductForm({
             <Input
               id="product-name"
               label="Name"
+              maxLength={200}
+              required
               value={values.name}
               onChange={(event) => updateField('name', event.target.value)}
               error={errors.name}
@@ -117,6 +140,9 @@ export function ProductForm({
             <Input
               id="product-sku"
               label="SKU"
+              maxLength={64}
+              required
+              error={errors.sku}
               value={values.sku ?? ''}
               onChange={(event) => updateField('sku', event.target.value)}
               placeholder="SKU-1001"
@@ -124,27 +150,52 @@ export function ProductForm({
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <Input
-              id="product-brand"
-              label="Brand"
-              value={values.brand ?? ''}
-              onChange={(event) => updateField('brand', event.target.value)}
-              placeholder="Acme"
-            />
+            <div className="flex flex-col">
+              <label htmlFor="product-brand" className="mb-2 text-sm font-medium text-foreground">
+                Brand
+              </label>
+              <select
+                id="product-brand"
+                className={`px-3 py-2 rounded-md border border-border bg-surface text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.brandId ? 'border-destructive' : ''}`}
+                value={values.brandId}
+                onChange={(event) => updateField('brandId', event.target.value)}
+                required
+                disabled={brands.length === 0}
+              >
+                <option value="">Select a brand</option>
+                {brands.map((brand) => (
+                  <option key={brand.id} value={brand.id}>{brand.name}</option>
+                ))}
+              </select>
+              {errors.brandId && <p className="mt-1 text-sm text-destructive">{errors.brandId}</p>}
+            </div>
 
-            <Input
-              id="product-category"
-              label="Category"
-              value={values.category}
-              onChange={(event) => updateField('category', event.target.value)}
-              error={errors.category}
-              placeholder="electronics"
-            />
+            <div className="flex flex-col">
+              <label htmlFor="product-category" className="mb-2 text-sm font-medium text-foreground">
+                Category
+              </label>
+              <select
+                id="product-category"
+                className={`px-3 py-2 rounded-md border border-border bg-surface text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.categoryId ? 'border-destructive' : ''}`}
+                value={values.categoryId}
+                onChange={(event) => updateField('categoryId', event.target.value)}
+                required
+                disabled={categories.length === 0}
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+              {errors.categoryId && <p className="mt-1 text-sm text-destructive">{errors.categoryId}</p>}
+            </div>
           </div>
 
           <Input
             id="product-description"
             label="Description"
+            required
+            error={errors.description}
             value={values.description ?? ''}
             onChange={(event) => updateField('description', event.target.value)}
             placeholder="Detailed product description"
@@ -155,8 +206,10 @@ export function ProductForm({
               id="product-price"
               label="Price"
               type="number"
-              min="0"
+              min="0.01"
+              max="99999999.99"
               step="0.01"
+              required
               value={values.price}
               onChange={(event) => updateField('price', event.target.value)}
               error={errors.price}

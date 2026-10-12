@@ -60,6 +60,8 @@ describe('Endpoints', () => {
 
   describe('admin', () => {
     it('exports admin product endpoints', () => {
+      expect(admin.catalog.categories).toBe('/admin/catalog/categories')
+      expect(admin.catalog.brands).toBe('/admin/catalog/brands')
       expect(admin.products.create).toBe('/admin/products')
       expect(admin.products.list).toBe('/admin/products')
       expect(admin.products.get('product-1')).toBe('/admin/products/product-1')

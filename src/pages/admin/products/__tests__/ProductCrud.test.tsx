@@ -22,13 +22,15 @@ describe('Admin product CRUD', () => {
         initialValues={{
           name: 'Laptop',
           sku: 'LAP-01',
-          brand: 'Acme',
-          category: 'electronics',
+          brandId: 'brand-acme',
+          categoryId: 'category-electronics',
           description: 'Gaming laptop',
           price: '999.00',
           stock: '12',
           discount: '5',
         }}
+        brands={[{ id: 'brand-acme', name: 'Acme', slug: 'acme' }]}
+        categories={[{ id: 'category-electronics', name: 'Electronics', slug: 'electronics' }]}
         onSubmit={onSubmit}
       />
     )
@@ -42,8 +44,8 @@ describe('Admin product CRUD', () => {
         expect.objectContaining({
           name: 'Gaming Laptop',
           sku: 'LAP-01',
-          brand: 'Acme',
-          category: 'electronics',
+          brandId: 'brand-acme',
+          categoryId: 'category-electronics',
         })
       )
     })
@@ -57,7 +59,15 @@ describe('Admin product CRUD', () => {
     } as Response)
 
     await listAdminProducts()
-    await createAdminProduct({ name: 'Monitor', price: '199.00', stock: 5 })
+    await createAdminProduct({
+      sku: 'MON-01',
+      name: 'Monitor',
+      description: 'Office monitor',
+      categoryId: 'category-electronics',
+      brandId: 'brand-acme',
+      basePrice: 199,
+      stock: 5,
+    })
     await updateProductStock('p-1', 6)
     await updateProductDiscount('p-1', 10)
     await deleteAdminProduct('p-1')
@@ -69,6 +79,22 @@ describe('Admin product CRUD', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/v1/admin/products',
       expect.objectContaining({ method: 'POST' })
+    )
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      '/api/v1/admin/products',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          sku: 'MON-01',
+          name: 'Monitor',
+          description: 'Office monitor',
+          categoryId: 'category-electronics',
+          brandId: 'brand-acme',
+          basePrice: 199,
+          stock: 5,
+        }),
+      })
     )
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/v1/admin/products/p-1/stock',

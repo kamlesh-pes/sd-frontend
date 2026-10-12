@@ -36,6 +36,21 @@ export interface ProductPayload {
   imageUrl?: string
 }
 
+export interface ProductCreateRequest {
+  sku: string
+  name: string
+  description: string
+  categoryId: string
+  brandId: string
+  basePrice: number
+  discountType?: 'PERCENTAGE' | 'FIXED'
+  discountValue?: number
+  stock?: number
+  attributes?: Record<string, string>
+  images?: { primary: string }
+  active?: boolean
+}
+
 function normalizeProductPage(payload: unknown): ProductPageResponse {
   const response = (payload ?? {}) as Record<string, unknown>
   const data =
@@ -77,8 +92,16 @@ export async function getAdminProduct(id: string): Promise<AdminProduct | null> 
   }
 }
 
-export async function createAdminProduct(payload: Partial<ProductPayload>): Promise<AdminProduct> {
-  return apiPost<AdminProduct>(admin.products.create, payload)
+export async function createAdminProduct(payload: ProductCreateRequest): Promise<AdminProduct> {
+  const response = await apiPost<unknown>(admin.products.create, payload)
+  const product =
+    response && typeof response === 'object' && 'data' in response
+      ? (response as { data?: unknown }).data
+      : response
+  if (!product || typeof product !== 'object' || typeof (product as AdminProduct).id !== 'string') {
+    throw new Error('The product response was invalid.')
+  }
+  return product as AdminProduct
 }
 
 export async function updateAdminProduct(id: string, payload: Partial<ProductPayload>): Promise<AdminProduct> {

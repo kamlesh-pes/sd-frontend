@@ -26,6 +26,14 @@ const productCatalog = [
   },
 ]
 
+const categoryCatalog = [
+  { id: 'category-electronics', name: 'Electronics', slug: 'electronics' },
+]
+
+const brandCatalog = [
+  { id: 'brand-acme', name: 'Acme', slug: 'acme' },
+]
+
 export const server = setupServer(
   http.get('/api/v1/auth/me', () => {
     return HttpResponse.json({
@@ -67,23 +75,44 @@ export const server = setupServer(
     })
   }),
 
+  http.get('/api/v1/admin/catalog/categories', () => {
+    return HttpResponse.json({ success: true, data: categoryCatalog })
+  }),
+
+  http.get('/api/v1/admin/catalog/brands', () => {
+    return HttpResponse.json({ success: true, data: brandCatalog })
+  }),
+
+  http.post('/api/v1/admin/catalog/categories', async ({ request }) => {
+    const body = (await request.json()) as { name: string; slug: string }
+    const created = { id: `category-${Date.now()}`, ...body }
+    categoryCatalog.push(created)
+    return HttpResponse.json({ success: true, data: created }, { status: 201 })
+  }),
+
+  http.post('/api/v1/admin/catalog/brands', async ({ request }) => {
+    const body = (await request.json()) as { name: string; slug: string }
+    const created = { id: `brand-${Date.now()}`, ...body }
+    brandCatalog.push(created)
+    return HttpResponse.json({ success: true, data: created }, { status: 201 })
+  }),
+
   http.post('/api/v1/admin/products', async ({ request }) => {
     const body = (await request.json()) as Record<string, unknown>
     const created = {
       id: `p-${Date.now()}`,
       name: String(body.name ?? 'New product'),
       sku: String(body.sku ?? 'NEW'),
-      brand: String(body.brand ?? 'Unknown'),
-      category: String(body.category ?? 'electronics'),
+      brandId: String(body.brandId ?? ''),
+      categoryId: String(body.categoryId ?? ''),
       description: String(body.description ?? ''),
-      price: String(body.price ?? '0'),
+      price: String(body.basePrice ?? '0'),
       stock: Number(body.stock ?? 0),
-      discount: Number(body.discount ?? 0),
-      imageUrl: String(body.imageUrl ?? ''),
+      discount: Number(body.discountValue ?? 0),
     }
 
     productCatalog.unshift(created)
-    return HttpResponse.json(created, { status: 201 })
+    return HttpResponse.json({ success: true, data: created }, { status: 201 })
   }),
 
   http.patch('/api/v1/admin/products/:id/stock', async ({ params, request }) => {
