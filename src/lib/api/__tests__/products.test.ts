@@ -30,6 +30,47 @@ describe('product API response handling', () => {
     })
   })
 
+  it('normalizes backend product card fields and keeps relative media paths', async () => {
+    server.use(
+      http.get('/api/v1/products', () =>
+        HttpResponse.json({
+          success: true,
+          data: {
+            totalElements: 1,
+            totalPages: 1,
+            size: 20,
+            content: [
+              {
+                id: 'p-3',
+                name: 'Mac book pro',
+                categoryName: 'electronics',
+                brandName: 'Apple',
+                basePrice: 120000,
+                effectivePrice: 117600,
+                images: {
+                  primary: '/media/products/product-1200.webp',
+                  thumbnail: '/media/products/product-400.webp',
+                },
+              },
+            ],
+            number: 0,
+          },
+        })
+      )
+    )
+
+    await expect(fetchProducts()).resolves.toMatchObject({
+      items: [
+        {
+          category: 'electronics',
+          brand: 'Apple',
+          price: 117600,
+          imageUrl: '/media/products/product-400.webp',
+        },
+      ],
+    })
+  })
+
   it('reads admin products from the backend data envelope', async () => {
     server.use(
       http.get('/api/v1/admin/products', () =>

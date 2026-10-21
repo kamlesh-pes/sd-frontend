@@ -9,7 +9,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className="rounded-lg border border-border bg-card p-4 shadow-sm">
-      <div className="mb-3 h-32 rounded-md bg-muted" role="img" aria-label={`${product.name} preview`} />
+      <div className="mb-3 flex h-32 items-center justify-center overflow-hidden rounded-md bg-muted">
+        {product.imageUrl && (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-contain"
+          />
+        )}
+      </div>
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{product.category ?? 'Uncategorized'}</p>
       <h3 className="mt-2 text-lg font-semibold text-foreground">{product.name}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{product.brand ?? 'Unknown brand'}</p>

@@ -22,7 +22,15 @@ export function ProductDetailCard({
   return (
     <article className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
       <div className="grid gap-6 p-6 md:grid-cols-2">
-        <div className="h-80 rounded-lg bg-muted" aria-label={`${product.name} image`} />
+        <div className="flex h-80 items-center justify-center overflow-hidden rounded-lg bg-muted">
+          {product.imageUrl && (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="h-full w-full object-contain"
+            />
+          )}
+        </div>
 
         <div>
           <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{product.category ?? 'Uncategorized'}</p>

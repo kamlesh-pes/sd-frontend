@@ -6,9 +6,17 @@ export interface Product {
   name: string
   description?: string
   brand?: string
+  brandName?: string
   category?: string
+  categoryName?: string
   price?: string | number
+  basePrice?: string | number
+  effectivePrice?: string | number
   imageUrl?: string
+  images?: {
+    primary?: string
+    thumbnail?: string
+  }
   stock?: number
   sku?: string
   [key: string]: unknown
@@ -32,6 +40,21 @@ export interface SearchProductsOptions extends FetchProductsOptions {
   query: string
 }
 
+function normalizeProduct(product: Product): Product {
+  const imageUrl =
+    product.imageUrl ??
+    product.images?.thumbnail ??
+    product.images?.primary
+
+  return {
+    ...product,
+    category: product.category ?? product.categoryName,
+    brand: product.brand ?? product.brandName,
+    price: product.effectivePrice ?? product.price ?? product.basePrice,
+    imageUrl,
+  }
+}
+
 function normalizeProductPage(payload: unknown): ProductPageResponse {
   const response = (payload ?? {}) as Record<string, unknown>
   const data =
@@ -39,13 +62,14 @@ function normalizeProductPage(payload: unknown): ProductPageResponse {
       ? (response.data as Record<string, unknown>)
       : response
 
-  const items = Array.isArray(data.items)
+  const products = Array.isArray(data.items)
     ? (data.items as Product[])
     : Array.isArray(data.products)
       ? (data.products as Product[])
       : Array.isArray(data.content)
         ? (data.content as Product[])
         : []
+  const items = products.map(normalizeProduct)
 
   return {
     items,

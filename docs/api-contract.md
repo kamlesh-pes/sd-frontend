@@ -514,6 +514,7 @@ These route families do not currently have controller mappings. Do not treat the
 ## Frontend integration notes
 
 - The backend's search parameter is `query`; it is not `q`. Search and suggestions currently require authentication.
+- Product responses may provide `categoryName`, `brandName`, `effectivePrice`, and `images.thumbnail`/`images.primary`; frontend cards normalize these fields, and the Vite development server proxies relative `/media/**` requests to the backend.
 - The backend cart item update/delete paths use the product UUID (`/cart/items/{productId}`), and add-item requests do not accept client-supplied names or prices.
 - Admin product payloads use `categoryId`, `brandId`, and `basePrice`; discounts have dedicated endpoints and a separate payload shape.
 - Do not infer that overview/documentation routes exist when they are listed above as unimplemented.
