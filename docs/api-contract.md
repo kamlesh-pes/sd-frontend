@@ -361,7 +361,7 @@ All admin product endpoints require `ROLE_ADMIN`.
 
 ### `POST /admin/products`
 
-- **Request body:** `ProductRequest`
+- **Request body:** `multipart/form-data` with a `product` part containing the `ProductRequest` JSON and an optional `image` part containing the image file. Set the `product` part's content type to `application/json`; the browser must set the multipart boundary.
 
 ```json
 {
@@ -379,21 +379,18 @@ All admin product endpoints require `ROLE_ADMIN`.
   "attributes": {
     "color": "blue"
   },
-  "images": {
-    "primary": "https://example.com/product.jpg"
-  },
   "active": true
 }
 ```
 
-Required fields: `sku` (max 64 characters), `name` (max 200 characters), `description`, `categoryId`, `brandId`, and `basePrice` (range `0.01`–`99999999.99`). `stock` must be nonnegative. Discount fields, discount timestamps, `attributes`, and `images` are optional. `discountType` is `PERCENTAGE` or `FIXED`. `active` defaults to `true`.
+Required fields: `sku` (max 64 characters), `name` (max 200 characters), `description`, `categoryId`, `brandId`, and `basePrice` (range `0.01`–`99999999.99`). `stock` must be nonnegative. Discount fields, discount timestamps, and `attributes` are optional. `discountType` is `PERCENTAGE` or `FIXED`. `active` defaults to `true`.
 
 - **Success:** `201 Created`; created product in the standard envelope.
 
 ### `PUT /admin/products/{id}`
 
 - **Path parameters:** `id` is the product UUID.
-- **Request body:** Same `ProductRequest` shape as `POST /admin/products`.
+- **Request body:** JSON `ProductRequest` with the same fields as the `product` part of `POST /admin/products`. Image upload is available when creating a product.
 - **Success:** `200`; updated product in the standard envelope.
 
 ### `GET /admin/products`

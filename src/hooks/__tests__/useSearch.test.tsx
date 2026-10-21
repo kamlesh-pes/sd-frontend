@@ -41,7 +41,7 @@ describe('useSearch', () => {
     expect(result.current.products).toHaveLength(2)
     expect(result.current.products[0].name).toBe('Laptop Pro')
     expect(mockFetch).toHaveBeenCalledWith(
-      '/api/v1/search?q=laptop',
+      '/api/v1/search?query=laptop',
       expect.objectContaining({ method: 'GET' })
     )
   })

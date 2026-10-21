@@ -211,6 +211,17 @@ describe('API Client', () => {
       expect(callArgs[1].body).toBe(JSON.stringify(body))
     })
 
+    it('apiPost sends FormData without overriding its multipart content type', async () => {
+      const body = new FormData()
+      body.append('product', new Blob(['{}'], { type: 'application/json' }))
+      await apiPost('/admin/products', body)
+
+      const callArgs = mockFetch.mock.calls[0]
+      expect(callArgs[1].method).toBe('POST')
+      expect(callArgs[1].body).toBe(body)
+      expect(callArgs[1].headers.get('Content-Type')).toBeNull()
+    })
+
     it('apiPatch sends PATCH request with body', async () => {
       const body = { name: 'Updated' }
       await apiPatch('/products/1', body)

@@ -1,7 +1,20 @@
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 
-const productCatalog = [
+const productCatalog: Array<{
+  id: string
+  name: string
+  sku: string
+  brand?: string
+  category?: string
+  description: string
+  price: string
+  stock: number
+  discount: number
+  brandId?: string
+  categoryId?: string
+  imageUrl?: string
+}> = [
   {
     id: 'p-100',
     name: 'Laptop Pro',
@@ -33,6 +46,15 @@ const categoryCatalog = [
 const brandCatalog = [
   { id: 'brand-acme', name: 'Acme', slug: 'acme' },
 ]
+
+function readFileText(file: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result))
+    reader.onerror = () => reject(reader.error)
+    reader.readAsText(file)
+  })
+}
 
 export const server = setupServer(
   http.get('/api/v1/auth/me', () => {
@@ -98,7 +120,16 @@ export const server = setupServer(
   }),
 
   http.post('/api/v1/admin/products', async ({ request }) => {
-    const body = (await request.json()) as Record<string, unknown>
+    const formData = await request.formData()
+    const productPart = formData.get('product')
+    if (!productPart || typeof productPart === 'string') {
+      return HttpResponse.json(
+        { error: { code: 'BAD_REQUEST', message: 'Product part is required', correlationId: 'abc' } },
+        { status: 400 }
+      )
+    }
+    const body = JSON.parse(await readFileText(productPart)) as Record<string, unknown>
+    const imagePart = formData.get('image')
     const created = {
       id: `p-${Date.now()}`,
       name: String(body.name ?? 'New product'),
@@ -109,6 +140,9 @@ export const server = setupServer(
       price: String(body.basePrice ?? '0'),
       stock: Number(body.stock ?? 0),
       discount: Number(body.discountValue ?? 0),
+      imageUrl: imagePart && typeof imagePart !== 'string'
+        ? `/uploads/${imagePart.name}`
+        : '',
     }
 
     productCatalog.unshift(created)

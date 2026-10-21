@@ -95,7 +95,6 @@ export function ProductManagementPage() {
           price: values.price,
           stock: Number(values.stock || 0),
           discount: Number(values.discount ?? 0),
-          imageUrl: values.imageUrl,
         }
         const updated = await updateAdminProduct(values.id, payload)
         setProducts((current) =>
@@ -113,10 +112,9 @@ export function ProductManagementPage() {
           ...(Number(values.discount ?? 0) > 0
             ? { discountType: 'PERCENTAGE' as const, discountValue: Number(values.discount) }
             : {}),
-          ...(values.imageUrl?.trim() ? { images: { primary: values.imageUrl.trim() } } : {}),
           active: true,
         }
-        const created = await createAdminProduct(payload)
+        const created = await createAdminProduct(payload, values.image)
         setProducts((current) => [created, ...current])
       }
 
@@ -221,7 +219,6 @@ export function ProductManagementPage() {
                     price: String(selectedProduct.price ?? '0'),
                     stock: String(selectedProduct.stock ?? 0),
                     discount: String(selectedProduct.discount ?? 0),
-                    imageUrl: selectedProduct.imageUrl ?? '',
                   }
                 : undefined
             }

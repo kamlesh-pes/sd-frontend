@@ -33,7 +33,6 @@ export interface ProductPayload {
   price: string | number
   stock?: number
   discount?: number
-  imageUrl?: string
 }
 
 export interface ProductCreateRequest {
@@ -47,7 +46,6 @@ export interface ProductCreateRequest {
   discountValue?: number
   stock?: number
   attributes?: Record<string, string>
-  images?: { primary: string }
   active?: boolean
 }
 
@@ -92,8 +90,14 @@ export async function getAdminProduct(id: string): Promise<AdminProduct | null> 
   }
 }
 
-export async function createAdminProduct(payload: ProductCreateRequest): Promise<AdminProduct> {
-  const response = await apiPost<unknown>(admin.products.create, payload)
+export async function createAdminProduct(
+  payload: ProductCreateRequest,
+  image?: File | null
+): Promise<AdminProduct> {
+  const formData = new FormData()
+  formData.append('product', new Blob([JSON.stringify(payload)], { type: 'application/json' }))
+  if (image) formData.append('image', image)
+  const response = await apiPost<unknown>(admin.products.create, formData)
   const product =
     response && typeof response === 'object' && 'data' in response
       ? (response as { data?: unknown }).data

@@ -29,7 +29,12 @@ export async function apiRequest<T>(
 
   // Build headers
   const headers = new Headers(fetchOptions.headers || {})
-  headers.set('Content-Type', 'application/json')
+  const isMultipart = typeof FormData !== 'undefined' && fetchOptions.body instanceof FormData
+  if (isMultipart) {
+    headers.delete('Content-Type')
+  } else {
+    headers.set('Content-Type', 'application/json')
+  }
 
   const accessToken = getAccessToken()
   if (accessToken && !headers.has('Authorization')) {
@@ -98,7 +103,12 @@ export async function apiPost<T>(
   return apiRequest<T>(endpoint, {
     ...options,
     method: 'POST',
-    body: body ? JSON.stringify(body) : undefined,
+    body:
+      typeof FormData !== 'undefined' && body instanceof FormData
+        ? body
+        : body
+          ? JSON.stringify(body)
+          : undefined,
   })
 }
 

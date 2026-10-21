@@ -24,7 +24,7 @@ export const products = {
 
 // Search endpoints
 export const search = {
-  search: (q: string) => `/search?q=${encodeURIComponent(q)}`,
+  search: (query: string) => `/search?query=${encodeURIComponent(query)}`,
   suggest: (q: string) => `/search/suggest?q=${encodeURIComponent(q)}`,
 }
 

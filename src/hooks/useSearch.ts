@@ -35,7 +35,7 @@ export function useSearch({
         return fetchProducts({ category, page, size })
       }
 
-      return searchProducts({ q: debouncedQuery, category, page, size })
+      return searchProducts({ query: debouncedQuery, category, page, size })
     },
     staleTime: 30_000,
   })

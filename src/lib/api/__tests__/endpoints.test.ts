@@ -25,8 +25,8 @@ describe('Endpoints', () => {
 
   describe('search', () => {
     it('exports search endpoints with query encoding', () => {
-      expect(search.search('laptop')).toBe('/search?q=laptop')
-      expect(search.search('laptop pro')).toBe('/search?q=laptop%20pro')
+      expect(search.search('laptop')).toBe('/search?query=laptop')
+      expect(search.search('laptop pro')).toBe('/search?query=laptop%20pro')
       expect(search.suggest('lap')).toBe('/search/suggest?q=lap')
     })
   })

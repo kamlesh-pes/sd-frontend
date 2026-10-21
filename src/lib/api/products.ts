@@ -29,7 +29,7 @@ export interface FetchProductsOptions {
 }
 
 export interface SearchProductsOptions extends FetchProductsOptions {
-  q: string
+  query: string
 }
 
 function normalizeProductPage(payload: unknown): ProductPageResponse {
@@ -83,8 +83,8 @@ export async function fetchProducts(options: FetchProductsOptions = {}): Promise
 }
 
 export async function searchProducts(options: SearchProductsOptions): Promise<ProductPageResponse> {
-  const { q, page = 0, size = 20, category } = options
-  const cleanQuery = q.trim()
+  const { query, page = 0, size = 20, category } = options
+  const cleanQuery = query.trim()
 
   if (!cleanQuery) {
     return fetchProducts({ category, page, size })

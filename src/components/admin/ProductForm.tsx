@@ -14,7 +14,7 @@ export interface ProductFormValues {
   price: string
   stock: string
   discount?: string
-  imageUrl?: string
+  image?: File | null
 }
 
 export interface ProductFormProps {
@@ -38,7 +38,6 @@ const emptyValues: ProductFormValues = {
   price: '',
   stock: '0',
   discount: '0',
-  imageUrl: '',
 }
 
 export function ProductForm({
@@ -54,11 +53,13 @@ export function ProductForm({
     ...emptyValues,
     ...initialValues,
   })
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [errors, setErrors] = useState<Partial<Record<keyof ProductFormValues, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     setValues({ ...emptyValues, ...initialValues })
+    setImageFile(null)
   }, [initialValues])
 
   const updateField = (field: keyof ProductFormValues, value: string) => {
@@ -108,7 +109,7 @@ export function ProductForm({
 
     setIsSubmitting(true)
     try {
-      await onSubmit?.({ ...values, name: values.name.trim() })
+      await onSubmit?.({ ...values, image: imageFile, name: values.name.trim() })
     } finally {
       setIsSubmitting(false)
     }
@@ -236,13 +237,23 @@ export function ProductForm({
             />
           </div>
 
-          <Input
-            id="product-image-url"
-            label="Image URL"
-            value={values.imageUrl ?? ''}
-            onChange={(event) => updateField('imageUrl', event.target.value)}
-            placeholder="https://example.com/image.jpg"
-          />
+          {mode === 'create' && (
+            <div className="flex flex-col">
+              <label htmlFor="product-image" className="mb-2 text-sm font-medium text-foreground">
+                Product image
+              </label>
+              <input
+                id="product-image"
+                type="file"
+                accept="image/*"
+                className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground file:mr-3 file:rounded file:border-0 file:bg-muted file:px-3 file:py-1 file:text-foreground"
+                onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
+              />
+              {imageFile && (
+                <p className="mt-1 text-sm text-muted-foreground">{imageFile.name}</p>
+              )}
+            </div>
+          )}
 
           <div className="flex justify-end gap-3 pt-2">
             {onCancel && (
